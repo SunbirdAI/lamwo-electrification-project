@@ -1,7 +1,7 @@
 # project-dashboard
 
 
-> Wep application for visualizing electrification options for Lamwo district. The project is built using NextJS
+> Wep application for visualizing electrification options for Lamwo district. The project is built using NextJS and based on code from a similar [open source electrification project.](https://github.com/OmdenaAI/omdena-philippines-renewable)
 
 ## Demo
 

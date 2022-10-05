@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Lamwo Electrification web app Documentation",
+    "info": "Lean more about the project, and how to use this application",
+    "url": "https://sunbird.ai",
+    "profileImage": "https://i.pinimg.com/originals/99/7b/0a/997b0a243df40b681d8c8177724f1b45.png"
+  },
+  {
+    "name": "Electrification Methodology",
+    "info": "Learn how the we combined several datasets to derive an electrification strategy for Lamwo.",
+    "url": "https://sunbird.ai",
+    "profileImage": "/images/google-slides.png"
+  },
+  {
+    "name": "Project Source Code",
+    "info": "Check out the project repository",
+    "url": "https://sunbird.ai",
+    "profileImage": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+  },
+  {
+    "name": "Download the Project Datasets",
+    "info": "Get the project datasets",
+    "url": "https://sunbird.ai",
+    "profileImage": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+  }
+]

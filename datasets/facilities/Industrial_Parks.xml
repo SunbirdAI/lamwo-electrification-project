@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+	<coordinateSystem>
+		<name>Universal Transverse Mercator - Zone 36 (N)</name>
+		<datum>Arc 1960 (Kenya)</datum>
+		<system>Transverse Mercator</system>
+		<unit>Meter</unit>
+		<majorAxis>6.378137000000000000000000e+06</majorAxis>
+		<eccentricity>8.181919084262148644803858e-02</eccentricity>
+		<centerX>0.000000000000000000000000e+00</centerX>
+		<centerY>0.000000000000000000000000e+00</centerY>
+		<centerZ>0.000000000000000000000000e+00</centerZ>
+		<rotationX>0.000000000000000000000000e+00</rotationX>
+		<rotationY>0.000000000000000000000000e+00</rotationY>
+		<rotationZ>0.000000000000000000000000e+00</rotationZ>
+		<scaleAdjustment>0.000000000000000000000000e+00</scaleAdjustment>
+		<scaleX>9.996000000000000440536496e-01</scaleX>
+		<localScaleX>1.000000000000000000000000e+00</localScaleX>
+		<scaleY>9.996000000000000440536496e-01</scaleY>
+		<localScaleY>1.000000000000000000000000e+00</localScaleY>
+		<falseEasting>5.000000000000000000000000e+05</falseEasting>
+		<localOffsetX>0.000000000000000000000000e+00</localOffsetX>
+		<falseNorthing>0.000000000000000000000000e+00</falseNorthing>
+		<localOffsetY>0.000000000000000000000000e+00</localOffsetY>
+		<centerLat>0.000000000000000000000000e+00</centerLat>
+		<centerLon>3.300000000000000000000000e+01</centerLon>
+	</coordinateSystem>
+</data>
+

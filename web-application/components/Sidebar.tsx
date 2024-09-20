@@ -4,11 +4,7 @@ import DetailsScreen from "./DetailsScreen";
 import ReasearchTab from "./ResearchTab";
 import AboutTab from "./AboutTab";
 import SiteDetails from "./SiteDetails";
-import {
-  setGlobalMapdata,
-  startPageLoad,
-  stopPageLoad,
-} from "./Utils";
+import { setGlobalMapdata, startPageLoad, stopPageLoad } from "./Utils";
 import MapStyleSelector from "../styles/MapStyleSelector";
 import LoadingSkeleton from "./LoadingSkeleton";
 
@@ -17,6 +13,14 @@ const Sidebar = (props: any) => {
   const [screen, setScreen] = useState<string>("home");
   const [selectedSite, selectSite] = useState<any>(null);
   const [query, setQuery] = useState<any>("");
+
+  //added
+  const [search, setSearch] = useState<boolean>(false);
+  const [visibleAreas, setVisibleAreas] = useState(10);
+
+  const loadMore = () => {
+    setVisibleAreas((prevCount) => prevCount + 10); // Load 10 more items
+  };
 
   const sidebarScrollTop = () => {
     let sidebarContainer: any = document.querySelector(".sidebar");
@@ -42,6 +46,7 @@ const Sidebar = (props: any) => {
   };
 
   const viewDetails = (details: any) => {
+    if (search) setSearch(false);
     let detailCoordinates = {
       lat: details.latitude,
       lng: details.longitude,
@@ -67,13 +72,11 @@ const Sidebar = (props: any) => {
 
   const searchDataset = (search_query: string) => {
     startPageLoad();
-    axios
-      .get(`/api/lamwo_villages?search=${search_query}`)
-      .then((res: any) => {
-        setAreas(res.data);
+    axios.get(`/api/lamwo_villages?search=${search_query}`).then((res: any) => {
+      setAreas(res.data);
 
-        stopPageLoad();
-      });
+      stopPageLoad();
+    });
   };
 
   useEffect(() => {
@@ -118,15 +121,32 @@ const Sidebar = (props: any) => {
           <>
             <div className="sidebar-navigation">
               <div className="top-bar">
-                <img src="/images/sunbird-logo.jpg" />
+                {!search && <img src="/images/sunbird-logo.jpg" />}
+                {search && (
+                  <>
+                    <button
+                      className="back-btn btn fade-in"
+                      onClick={() => {
+                        setSearch(false);
+                        setQuery("");
+                        fetchData();
+                      }}
+                    >
+                      <i className="la la-arrow-circle-left" />
+                    </button>
+                  </>
+                )}
                 <div className="mt-1 mr-2 d-flex">
                   <input
                     type="text"
-                    placeholder="Search Places.."
+                    placeholder="Search Village.."
                     className="form-control"
                     id="search-input"
-                    onKeyUp={(e: any) => {
+                    value={query}
+                    onChange={(e: any) => {
+                      setSearch(true);
                       setQuery(e.target.value);
+                      searchDataset(e.target.value);
                       if (e.key === "Enter") {
                         searchDataset(e.target.value);
                       }
@@ -142,52 +162,54 @@ const Sidebar = (props: any) => {
                   </button>
                 </div>
               </div>
-              <div className="nav-links">
-                <span className="active">Villages</span>
-                <span
-                  onClick={() => {
-                    setScreen("research");
-                    sidebarScrollTop();
-                  }}
-                >
-                  Project resources
-                </span>
+              {!search && (
+                <div className="nav-links">
+                  <span className="active">Villages</span>
+                  <span
+                    onClick={() => {
+                      setScreen("research");
+                      sidebarScrollTop();
+                    }}
+                  >
+                    Project resources
+               8   </span>
 
-                <span
-                  onClick={() => {
-                    setScreen("about");
-                    sidebarScrollTop();
-                  }}
-                >
-                  About Sunbird
-                </span>
-              </div>
+                  <span
+                    onClick={() => {
+                      setScreen("about");
+                      sidebarScrollTop();
+                    }}
+                  >
+                    About Sunbird
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="sidebar-content">
-              <div className="cover-card fade-in dl-2">
-                <span className="mt-auto">
-                  Electrification strategy for Lamwo district
-                </span>
-              </div>
+              {!search && (
+                <>
+                  <div className="cover-card fade-in dl-2">
+                    <span className="mt-auto">
+                      Electrification strategy for Lamwo district
+                    </span>
+                  </div>
 
-              <MapStyleSelector />
-
+                  <MapStyleSelector />
+                </>
+              )}
               <h4>
                 <i className="la la-list text-primary" />
                 Villages in Lamwo
               </h4>
-
               {areas && areas.length === 0 && query.trim() !== "" && (
                 <div className="mt-3 border-top py-3 fade-in-bottom">
                   <h2>No results found.</h2>
                 </div>
               )}
-
               {!areas && <LoadingSkeleton />}
-
               {areas &&
-                areas.map((data: any, index: number) => {
+                areas.slice(0, visibleAreas).map((data: any, index: number) => {
                   return (
                     <div
                       className="card-item"
@@ -204,7 +226,9 @@ const Sidebar = (props: any) => {
                         </div>
 
                         <div className="card-info">
-                          <span><strong>{data.village}</strong></span>
+                          <span>
+                            <strong>{data.village}</strong>
+                          </span>
                           <div className="tag-row mt-1">
                             <small className="badge badge-primary mr-2">
                               Village ID
@@ -219,6 +243,24 @@ const Sidebar = (props: any) => {
                     </div>
                   );
                 })}
+
+              {areas && (
+                <div className="load-area">
+                  {visibleAreas < areas.length && (
+                    <button className="load-btn" onClick={loadMore}>
+                      show more . . .
+                    </button>
+                  )}
+                  {areas.length > 0 && visibleAreas > 10 && (
+                    <button
+                      className="load-btn"
+                      onClick={() => setVisibleAreas(10)}
+                    >
+                      show less
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </>
         )}

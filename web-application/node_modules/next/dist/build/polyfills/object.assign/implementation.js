@@ -1,2 +1,4 @@
-"use strict";module.exports=Object.assign;
+"use strict";
+module.exports = Object.assign;
+
 //# sourceMappingURL=implementation.js.map

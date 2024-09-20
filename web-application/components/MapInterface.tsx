@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import {
   currentLocation,
@@ -12,6 +12,10 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoiZW13ZWJhemUiLCJhIjoiY2w2OHRpMzI5MGJhNDNkcGUycjVoYmZoNiJ9.XngKi9j4uHqN0iiJSlMyhQ";
 
 const MapInterface = (props: any) => {
+
+  const mapContainerRef = useRef(null);
+  const [map, setMap] = useState<mapboxgl.Map | null>(null);
+
   useEffect(() => {
     // start new Mapbox Instance
     const map = new mapboxgl.Map({
@@ -19,10 +23,28 @@ const MapInterface = (props: any) => {
       style: localStorage.mapStyle ? localStorage.mapStyle : satelliteStyle,
       center: [32.702, 3.508],
       zoom: 9,
-      minZoom: 6,
-      maxPitch: 65, // pitch in degrees
-      maxBearing: -65, // bearing in degrees
+      minZoom: 5,
+      pitchWithRotate: false, // Disable map pitch when rotating
+      dragRotate: false,      // Disable map rotation by dragging
+      transition: {
+        duration: 300,
+        delay: 0,
+      },
     });
+
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+    // Add fullscreen control
+    map.addControl(new mapboxgl.FullscreenControl(), "top-right");
+
+    // Optionally, add a geolocation control
+    map.addControl(new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true
+      },
+      trackUserLocation: true
+    }), "top-right");
 
     map.on("load", () => {
       map.addSource("lamwo_villages", {
@@ -81,9 +103,70 @@ const MapInterface = (props: any) => {
         'source': 'lamwo_villages',
         'layout': {},
         'paint': {
-          'line-color': '#3D550C',
+          'line-color': '#28a745',
           'line-width': 1
         }
+      });
+
+      let selectedVillageId: null = null;
+
+      // Add click event on the village layer
+      map.on('click', 'id_villages', (e: { features: any[]; }) => {
+        const clickedVillage = e.features[0];
+
+        // Get the coordinates of the clicked village polygon
+        const coordinates = clickedVillage.geometry.coordinates[0];
+
+        // Create a new LngLatBounds instance and extend it with the village's coordinates
+        const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
+
+        coordinates.forEach((coord: any) => {
+          bounds.extend(coord);  // Extend the bounds to include each coordinate
+        });
+
+        // Use fitBounds to fit the map to the village's bounding box
+        map.fitBounds(bounds, {
+          padding: { top: 10, bottom: 25, left: 15, right: 5 }, // Add padding around the village
+          maxZoom: 16,  // Maximum zoom level
+          duration: 1500 // Animation duration
+        });
+
+
+        // // Focus on the clicked village by flying to its center
+        // map.fitBounds(clickedVillage.geometry.coordinates, {
+        //   padding: { top: 10, bottom:25, left: 15, right: 5 }, // Add padding around the village
+        //   maxZoom: 12, // Maximum zoom level
+        //   duration: 1500 // Animation duration
+        // });
+
+
+        // Highlight the clicked village (optional)
+        if (selectedVillageId) {
+          map.setFeatureState({ source: 'lamwo_villages', id: selectedVillageId }, { selected: false });
+        }
+        selectedVillageId = clickedVillage.id;
+        map.setFeatureState({ source: 'lamwo_villages', id: clickedVillage.id }, { selected: true });
+      });
+
+      // Style the village differently when selected (optional)
+      // map.addLayer({
+      //   'id': 'selected-village',
+      //   'type': 'line',
+      //   'source': 'lamwo_villages',
+      //   'paint': {
+      //     'line-color': '#28a745',
+      //     'line-width': 2
+      //   }
+      // });
+
+      // Change the cursor to pointer when hovering over villages
+      map.on('mouseenter', 'id_villages', () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+
+      // Reset the cursor when leaving a village
+      map.on('mouseleave', 'id_villages', () => {
+        map.getCanvas().style.cursor = '';
       });
 
       // Add electricity grid.
@@ -93,8 +176,9 @@ const MapInterface = (props: any) => {
         'source': 'grid',
         'layout': {},
         'paint': {
-          'line-color': '#0000FF',
-          'line-width': 1
+          'line-color': '#FFA500', // Use a bright color for contrast (Orange)
+          'line-width': 2,         // Increase line width for better visibility
+          'line-opacity': 0.8      // Add transparency for smoother appearance
         }
       });
 
@@ -209,7 +293,7 @@ const MapInterface = (props: any) => {
     });
 
     const flytoLocation = () => {
-      // console.log("dest=>", props.coordinates);
+      console.log("dest=>", [currentLocation().lng, currentLocation().lat]);
       map.flyTo({
         center: [currentLocation().lng, currentLocation().lat],
         // zoom: map.getZoom(),
@@ -217,6 +301,15 @@ const MapInterface = (props: any) => {
         speed: 1.25,
         essential: true,
       });
+      // Create a new LngLatBounds instance and extend it with the village's coordinates
+      // const bounds2 = new mapboxgl.LngLatBounds([currentLocation().lng, currentLocation().lat]);
+      // // Use fitBounds to fit the map to the village's bounding box
+      // map.fitBounds(bounds2, {
+      //   padding: { top: 10, bottom: 25, left: 15, right: 5 }, // Add padding around the village
+      //   maxZoom: 16,  // Maximum zoom level
+      //   duration: 1500 // Animation duration
+      // });
+
     };
 
     const renderMarkers = () => {

@@ -1,5 +1,5 @@
 import Toastify from "toastify-js";
-import nprogress from "nprogress";
+import nProgress from "nprogress";
 
 export const guid = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -20,16 +20,16 @@ export const Toast = (message: string) => {
     position: "right", // `left`, `center` or `right`
     backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
     stopOnFocus: true, // Prevents dismissing of toast on hover
-    onClick: function () { }, // Callback after click
+    onClick: function () {}, // Callback after click
   }).showToast();
 };
 
 export const startPageLoad = () => {
-  nprogress.start();
+  nProgress.start();
 };
 
 export const stopPageLoad = () => {
-  nprogress.done();
+  nProgress.done();
 };
 
 export const lightMapStyle = "mapbox://styles/mapbox/light-v10";
@@ -50,7 +50,7 @@ export const currentLocation = () => {
   if (localStorage.coordinates) {
     return JSON.parse(localStorage.coordinates);
   } else {
-    return { lng: 120.979, lat: 15.0941 };
+    return { lng: 3.508, lat: 32.702 };
   }
 };
 
@@ -120,26 +120,25 @@ export function measureCoordDistance(
   }
 }
 
-
 // polygon fill opacity
 
 export const getFillOpacity = () => {
-  let fillOpacity = 0.20;
+  let fillOpacity = 0.2;
 
   let mapMode = localStorage.mapMode ? localStorage.mapMode : "light";
 
   switch (mapMode) {
     case "dark":
-      fillOpacity = 0.10;
+      fillOpacity = 0.1;
       break;
     case "light":
-      fillOpacity = 0.20;
+      fillOpacity = 0.2;
       break;
     case "street":
-      fillOpacity = 0.20;
+      fillOpacity = 0.2;
       break;
     case "satellite":
-      fillOpacity = 0.20;
+      fillOpacity = 0.2;
       break;
   }
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import {
   currentLocation,
@@ -12,10 +12,6 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoiZW13ZWJhemUiLCJhIjoiY2w2OHRpMzI5MGJhNDNkcGUycjVoYmZoNiJ9.XngKi9j4uHqN0iiJSlMyhQ";
 
 const MapInterface = (props: any) => {
-
-  const mapContainerRef = useRef(null);
-  const [map, setMap] = useState<mapboxgl.Map | null>(null);
-
   useEffect(() => {
     // start new Mapbox Instance
     const map = new mapboxgl.Map({
@@ -25,7 +21,7 @@ const MapInterface = (props: any) => {
       zoom: 9,
       minZoom: 5,
       pitchWithRotate: false, // Disable map pitch when rotating
-      dragRotate: false,      // Disable map rotation by dragging
+      dragRotate: false, // Disable map rotation by dragging
       transition: {
         duration: 300,
         delay: 0,
@@ -39,16 +35,20 @@ const MapInterface = (props: any) => {
     map.addControl(new mapboxgl.FullscreenControl(), "top-right");
 
     // Optionally, add a geolocation control
-    map.addControl(new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      trackUserLocation: true
-    }), "top-right");
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+      }),
+      "top-right"
+    );
 
     map.on("load", () => {
       map.addSource("lamwo_villages", {
         type: "geojson",
+        promoteId: "ID",
         data: "/geojson_maps/lamwo_villages.geojson",
       });
 
@@ -57,80 +57,127 @@ const MapInterface = (props: any) => {
         data: "/geojson_maps/lamwo_buildings.json",
       });
 
-      map.addSource('grid', {
-        'type': 'geojson',
-        'data': '/geojson_maps/grid-existing.geojson'
+      map.addSource("grid", {
+        type: "geojson",
+        data: "/geojson_maps/grid-existing.geojson",
       });
 
-      map.addSource('candidate-MGs', {
-        'type': 'geojson',
-        'data': '/geojson_maps/Candidate-MGs.geojson'
+      map.addSource("candidate-MGs", {
+        type: "geojson",
+        data: "/geojson_maps/Candidate-MGs.geojson",
       });
 
-      map.addSource('Existing-MGs', {
-        'type': 'geojson',
-        'data': '/geojson_maps/Existing-MGs.geojson'
+      map.addSource("Existing-MGs", {
+        type: "geojson",
+        data: "/geojson_maps/Existing-MGs.geojson",
       });
 
       // Add Lamwo villages to map.
       map.addLayer({
-        'id': 'id_villages',
-        'type': 'fill',
-        'source': 'lamwo_villages', // reference the data source
-        'layout': {},
-        'paint': {
-          'fill-color': '#ECF87F', // olive green
-          'fill-opacity': 0.2
-        }
+        id: "id_villages",
+        type: "fill",
+        source: "lamwo_villages", // reference the data source
+
+        layout: {},
+        paint: {
+          "fill-color": "#ECF87F",
+
+          "fill-opacity": 0.2,
+        },
       });
 
       // Add Lamwo building outlines.
       map.addLayer({
-        'id': 'outline_buildings',
-        'type': 'line',
-        'source': 'lamwo_buildings',
-        'layout': {},
-        'paint': {
-          'line-color': '#59981A',
-          'line-width': 2
-        }
+        id: "outline_buildings",
+        type: "line",
+        source: "lamwo_buildings",
+        layout: {},
+        paint: {
+          "line-color": "#59981A",
+          "line-width": 1,
+        },
       });
 
       // Add Lamwo village outlines.
       map.addLayer({
-        'id': 'outline_villages',
-        'type': 'line',
-        'source': 'lamwo_villages',
-        'layout': {},
-        'paint': {
-          'line-color': '#28a745',
-          'line-width': 1
-        }
+        id: "outline_villages",
+        type: "line",
+        source: "lamwo_villages",
+        layout: {},
+        paint: {
+          "line-color": [
+            "case",
+            ["boolean", ["feature-state", "click"], false],
+            "#00ff00",
+            "#28a745",
+          ],
+          "line-width": 1,
+        },
+      });
+
+      // Add electricity grid.
+      map.addLayer({
+        id: "electricity_grid",
+        type: "line",
+        source: "grid",
+        layout: {},
+        paint: {
+          "line-color": "#FFA500", // Use a bright color for contrast (Orange)
+          "line-width": 2, // Increase line width for better visibility
+          "line-opacity": 0.8, // Add transparency for smoother appearance
+        },
+      });
+
+      // Add candidate MG
+      // Icons from https://github.com/mapbox/mapbox-gl-styles
+      map.addLayer({
+        id: "candidate-mgs",
+        type: "symbol",
+        source: "candidate-MGs",
+        layout: {
+          "icon-image": "monument-15", //school
+          "icon-allow-overlap": true,
+          "icon-size": 1,
+        },
+      });
+
+      map.addLayer({
+        id: "existing-mgs",
+        type: "symbol",
+        source: "Existing-MGs",
+        layout: {
+          "icon-image": "school-15",
+          "icon-allow-overlap": true,
+          "icon-size": 1,
+        },
       });
 
       let selectedVillageId: null = null;
 
       // Add click event on the village layer
-      map.on('click', 'id_villages', (e: { features: any[]; }) => {
+      map.on("click", "id_villages", (e: any) => {
         const clickedVillage = e.features[0];
+        console.log("village", clickedVillage);
 
         // Get the coordinates of the clicked village polygon
         const coordinates = clickedVillage.geometry.coordinates[0];
 
         // Create a new LngLatBounds instance and extend it with the village's coordinates
-        const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
+        const bounds = new mapboxgl.LngLatBounds(
+          coordinates[0],
+          coordinates[0]
+        );
 
         coordinates.forEach((coord: any) => {
-          bounds.extend(coord);  // Extend the bounds to include each coordinate
+          bounds.extend(coord); // Extend the bounds to include each coordinate
         });
 
         // Use fitBounds to fit the map to the village's bounding box
         map.fitBounds(bounds, {
           padding: { top: 10, bottom: 25, left: 15, right: 5 }, // Add padding around the village
-          maxZoom: 16,  // Maximum zoom level
-          duration: 1500 // Animation duration
+          maxZoom: 16, // Maximum zoom level
+          duration: 1500, // Animation duration
         });
-
 
         // // Focus on the clicked village by flying to its center
         // map.fitBounds(clickedVillage.geometry.coordinates, {
@@ -139,13 +186,20 @@ const MapInterface = (props: any) => {
         //   duration: 1500 // Animation duration
         // });
 
-
         // Highlight the clicked village (optional)
-        if (selectedVillageId) {
-          map.setFeatureState({ source: 'lamwo_villages', id: selectedVillageId }, { selected: false });
+        if (e.features.length > 0) {
+          if (selectedVillageId) {
+            map.setFeatureState(
+              { source: "lamwo_villages", id: selectedVillageId },
+              { click: false }
+            );
+          }
+          selectedVillageId = clickedVillage.id;
+          map.setFeatureState(
+            { source: "lamwo_villages", id: selectedVillageId },
+            { click: true }
+          );
         }
-        selectedVillageId = clickedVillage.id;
-        map.setFeatureState({ source: 'lamwo_villages', id: clickedVillage.id }, { selected: true });
       });
 
       // Style the village differently when selected (optional)
@@ -160,50 +214,13 @@ const MapInterface = (props: any) => {
       // });
 
       // Change the cursor to pointer when hovering over villages
-      map.on('mouseenter', 'id_villages', () => {
-        map.getCanvas().style.cursor = 'pointer';
+      map.on("mouseenter", "id_villages", () => {
+        map.getCanvas().style.cursor = "pointer";
       });
 
       // Reset the cursor when leaving a village
-      map.on('mouseleave', 'id_villages', () => {
-        map.getCanvas().style.cursor = '';
-      });
-
-      // Add electricity grid.
-      map.addLayer({
-        'id': 'electricity_grid',
-        'type': 'line',
-        'source': 'grid',
-        'layout': {},
-        'paint': {
-          'line-color': '#FFA500', // Use a bright color for contrast (Orange)
-          'line-width': 2,         // Increase line width for better visibility
-          'line-opacity': 0.8      // Add transparency for smoother appearance
-        }
-      });
-
-      // Add candidate MG
-      // Icons from https://github.com/mapbox/mapbox-gl-styles
-      map.addLayer({
-        'id': 'candidate-mgs',
-        'type': 'symbol',
-        'source': 'candidate-MGs',
-        'layout': {
-          'icon-image': 'monument-15', //school
-          'icon-allow-overlap': true,
-          'icon-size': 1
-        },
-      });
-
-      map.addLayer({
-        'id': 'existing-mgs',
-        'type': 'symbol',
-        'source': 'Existing-MGs',
-        'layout': {
-          'icon-image': 'school-15',
-          'icon-allow-overlap': true,
-          'icon-size': 1
-        },
+      map.on("mouseleave", "id_villages", () => {
+        map.getCanvas().style.cursor = "";
       });
 
       let popup = new mapboxgl.Popup({
@@ -227,8 +244,7 @@ const MapInterface = (props: any) => {
             <small class="badge badge-info">
             CANDIDATE MINI-GRID
             </small>
-            </div></div></div>`
-
+            </div></div></div>`;
 
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
@@ -241,7 +257,6 @@ const MapInterface = (props: any) => {
 
         popup.setHTML(description);
         popup.addTo(map);
-
       });
 
       map.on("mouseenter", "existing-mgs", function (e: any) {
@@ -253,19 +268,30 @@ const MapInterface = (props: any) => {
             <div class="marker-info">
             <div class="marker-info-content">
             <div class="content">
-            <span class="mb-1">Name: ${e.features[0].properties.Village_Na}</span>
-            <small><strong>Category:</strong> ${e.features[0].properties.Category}</small>
-            <small><strong>Capacity:</strong> ${e.features[0].properties.Capacity}</small>
+            <span class="mb-1">Name: ${
+              e.features[0].properties.Village_Na
+            }</span>
+            <small><strong>Category:</strong> ${
+              e.features[0].properties.Category
+            }</small>
+            <small><strong>Capacity:</strong> ${
+              e.features[0].properties.Capacity
+            }</small>
             <small><strong>Implementation Partner:</strong> 
-            ${e.features[0].properties.Developer === 'GIZ/REA' ? 'MEMD-EU-GIZ' : e.features[0].properties.Developer}</small>
-            <small><strong>Details:</strong> ${e.features[0].properties.Remarks}</small>
+            ${
+              e.features[0].properties.Developer === "GIZ/REA"
+                ? "MEMD-EU-GIZ"
+                : e.features[0].properties.Developer
+            }</small>
+            <small><strong>Details:</strong> ${
+              e.features[0].properties.Remarks
+            }</small>
             </div>
 
             <small class="badge badge-success">
             EXISTING MINI-GRID
             </small>
-            </div></div></div>`
-
+            </div></div></div>`;
 
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
@@ -278,18 +304,16 @@ const MapInterface = (props: any) => {
 
         popup.setHTML(description);
         popup.addTo(map);
-
       });
 
-      map.on('mouseenter', ['candidate-mgs', 'existing-mgs'], () => {
-        map.getCanvas().style.cursor = 'pointer';
+      map.on("mouseenter", ["candidate-mgs", "existing-mgs"], () => {
+        map.getCanvas().style.cursor = "pointer";
       });
 
       // Change it back to a pointer when it leaves.
-      map.on('mouseleave', ['candidate-mgs', 'existing-mgs'], () => {
-        map.getCanvas().style.cursor = '';
+      map.on("mouseleave", ["candidate-mgs", "existing-mgs"], () => {
+        map.getCanvas().style.cursor = "";
       });
-
     });
 
     const flytoLocation = () => {
@@ -309,7 +333,6 @@ const MapInterface = (props: any) => {
       //   maxZoom: 16,  // Maximum zoom level
       //   duration: 1500 // Animation duration
       // });
-
     };
 
     const renderMarkers = () => {
@@ -325,10 +348,10 @@ const MapInterface = (props: any) => {
           };
 
           elx.onmouseenter = () => {
-            map.getCanvas().style.cursor = 'pointer';
+            map.getCanvas().style.cursor = "pointer";
           };
           elx.onmouseleave = () => {
-            map.getCanvas().style.cursor = '';
+            map.getCanvas().style.cursor = "";
           };
 
           elx.innerHTML = `

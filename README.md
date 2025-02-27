@@ -31,9 +31,14 @@ The goal is to use machine learning to identify the best electrification strateg
     │   └── predict_minigrid_village.ipynb                                    <- Minigrid predictor inference
     │
     ├── rank_minigrid_villages_PUE               <- Rank villages based on Productive Use of Energy (PUE)
+    │   ├── train_PUE_predictor.ipynb                                        <- Train PUE predictor
+    │   ├── predict_PUE_and_rank_candidate_mg_villages.ipynb                 <- Inference for PUE and ranking
+    │   └── rank_candidate_minigrids_lamwo.ipynb                             <- Rank Lamwo candidate mg villages
     │
     ├── reposition_minigrids                     <- Reposition minigrids to areas of population.
     │
-    └──  predict_future_building_count           <- Predict future building growth in a village.
+    ├── predict_future_building_count            <- Predict future building growth in a village.
+    │
+    └── village_feature_extraction.ipynb         <- Extract features from villages in Lamwo.
 
 ```

@@ -25,8 +25,8 @@ The goal is to use machine learning to identify the best electrification strateg
 └── notebooks          <- Jupyter notebooks for the machine learning components.
     │
     ├── predicting_minigrid_villages             <- Prediction of minigrid villages
-    │   ├── train_electrification_strategy_for_village_predictor.ipynb        <- Train strategy predictor
-    │   ├── train_minigrid_village_predictor.ipynb                            <- Train strategy predictor
+    │   ├── train_electrification_strategy_for_village_predictor.ipynb        <- Train electrification strategy predictor
+    │   ├── train_minigrid_village_predictor.ipynb                            <- Train minigrid predictor
     │   ├── predict_electrification_strategy_for_village.ipynb                <- Strategy predictor inference
     │   └── predict_minigrid_village.ipynb                                    <- Minigrid predictor inference
     │

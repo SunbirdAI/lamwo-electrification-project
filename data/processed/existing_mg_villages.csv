@@ -1,0 +1,26 @@
+OBJECTID,Location,Status,Name,Capacity,ID,addr_sname,addr_pname,addr_vname,winch_rating,winch_prob
+16,Agoro_Incl Tumanum B,Existing,Agoro,0.08,5503128,Agoro,Pobar,Central,Best,0.85
+17,Apwoyo TC,Existing,Apwoyo TC,0.04,5503114,Agoro,Rudi,Pakinyi,Some-how,0.6
+18,Apyeta West/Apyeta Primary School,Existing,Apyeta West,0.04,5502851,Palabek Ogili,Apyetta,Apyetta West,Poor,0.17
+20,Aweno Olwi,Existing,Aweno Olwi,0.02,5503198,Lokung,Dibolyec,Aweno Olwi,Poor,0.14
+21,Ayuu Alali,Existing,Ayuu Alali,0.04,5502991,Palabek Kal,Ayuu Alali,Amot Larom,Some-how,0.45
+22,Kapeta,Existing,Kapeta,0.04,5502980,Palabek Kal,Lamwo,Bajere Biya-a,Some-how,0.52
+24,Lapidiyenyi,Existing,Lapidiyenyi,0.04,5502935,Paluga,Paluga,Dogudi,Medium,0.68
+25,Lelapwot West,Existing,Lelapwot West,0.02,5503068,Lokung,Lelapwot,Lela Pwot West,Some-how,0.58
+26,Logwak,Existing,Logwak,0.04,5503061,Lokung,Dibolyec,Logwak Central,Some-how,0.56
+27,Loromibeng A-B,Existing,Loromibeng A-B,0.04,5500905,Agoro,Pobar,Lamuribenge-b,Poor,0.25
+28,Moroto East,Existing,Moroto East,0.02,5503105,Agoro,Pawach,Moroto East,Poor,0.19
+29,Muddu Central,Existing,Muddu Central,0.04,5502887,Palabek Ogili,Paracelle,Mudu Central,Some-how,0.48
+30,Ngomoromo,Existing,Ngomoromo,0.04,5501315,Lokung,Licwar,Ngomoromo,Medium,0.74
+31,Oboko TC,Existing,Oboko TC,0.04,5502916,Agoro,Pawach,Oboko,Poor,0.22
+32,Ogili TC,Existing,Ogili TC,0.08,5502905,Palabek Ogili,Lugwar,Lagotopuk,Best,0.83
+33,Opoki,Existing,Opoki,0.04,5502848,Padibe West,Madi Kiloc,Opoki East,Some-how,0.55
+34,Otaa,Existing,Otaa,0.04,5502887,Palabek Ogili,Paracelle,Mudu Central,Some-how,0.46
+35,Paloga Central,Existing,Paloga Central,0.08,5502939,Paluga,Paluga,Central,Best,0.9
+36,Pangira -Licwar Central,Existing,Pangira-Licwar Central,0.04,5503160,Lokung,Licwar,Licwar Central,Medium,0.72
+37,Pany Buk East-West,Existing,Pany Buk East-West,0.04,5503104,Agoro,Pawach,Penybuk,Poor,0.2
+38,Pawena TC,Existing,Pawena TC,0.02,5501561,Palabek Gem,Cubu,Pawena Central,Poor,0.3
+39,Potika,Existing,Potika,0.04,5503099,Agoro,Potika,Cwiny Muribe-b,Medium,0.66
+40,Ywaya,Existing,Ywaya,0.04,5500908,Agoro,Pobar,Ywaya,Some-how,0.53
+58,Labayango,Existing,Labayango,0.04,5502962,Padibe East,Wangtit,Guci,Medium,0.65
+59,Apyetta TC,Existing,Apyetta TC,0.04,5502920,Palabek Ogili,Apyetta,Apyetta Central,Medium,0.7

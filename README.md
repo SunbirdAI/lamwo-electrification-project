@@ -1,4 +1,4 @@
-# Lamwo electrification project
+# Green electrification planning
 This is a project in partnership with GIZ FairForward, Sunbird AI and the Ministry of Energy and Mineral Development in Uganda.
 
 The goal is to use machine learning to identify the best electrification strategy for a rural village in Uganda. For this prototype we focus on Lamwo district in the North of Uganda.

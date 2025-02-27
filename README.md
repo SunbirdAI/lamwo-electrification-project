@@ -27,8 +27,8 @@ The goal is to use machine learning to identify the best electrification strateg
     ├── predicting_minigrid_villages             <- Prediction of minigrid villages
     │   ├── train_electrification_strategy_for_village_predictor.ipynb        <- Train strategy predictor
     │   ├── train_minigrid_village_predictor.ipynb                            <- Train strategy predictor
-    │   ├── predict_electrification_strategy_for_village_predictor.ipynb      <- Strategy predictor inference
-    │   └── predict_minigrid_village_predictor.ipynb                          <- Minigrid predictor inference
+    │   ├── predict_electrification_strategy_for_village.ipynb                <- Strategy predictor inference
+    │   └── predict_minigrid_village.ipynb                                    <- Minigrid predictor inference
     │
     ├── rank_minigrid_villages_PUE               <- Rank villages based on Productive Use of Energy (PUE)
     │

@@ -35,10 +35,41 @@ The goal is to use machine learning to identify the best electrification strateg
     │   ├── predict_PUE_and_rank_candidate_mg_villages.ipynb                 <- Inference for PUE and ranking
     │   └── rank_candidate_minigrids_lamwo.ipynb                             <- Rank Lamwo candidate mg villages
     │
-    ├── reposition_minigrids                     <- Reposition minigrids to areas of population.
+    ├── reposition_minigrids                     <- Reposition minigrids to more densely populated areas.
+    │   └── move_minigrids.ipynb                             
     │
     ├── predict_future_building_count            <- Predict future building growth in a village.
+    │   ├── historic_building_counts_simple_regression.ipynb        <- Analysis of building counts in Lamwo's villages
+    │   ├── image_regression_data_preprocesser.ipynb                <- Prepares data for image regression model 
+    │   ├── image_regression_model_trainer.ipynb                    <- Trains image regression model
+    │   └── image_regression_tester.ipynb                           <- Testing and inference of image regression model
     │
     └── village_feature_extraction.ipynb         <- Extract features from villages in Lamwo.
 
 ```
+
+## Setup Instructions
+
+### Install Git LFS
+
+To handle large files, you need to install Git LFS (Large File Storage). Follow the instructions below to install and set up Git LFS:
+
+1. **Install Git LFS**:
+    ```sh
+    git lfs install
+    ```
+
+2. **Track Jupyter Notebooks**:
+    ```sh
+    git lfs track "*.ipynb"
+    ```
+
+3. **Add the changes to Git**:
+    ```sh
+    git add .gitattributes
+    ```
+
+4. **Commit the changes**:
+    ```sh
+    git commit -m "Track Jupyter Notebooks with Git LFS"
+    ```

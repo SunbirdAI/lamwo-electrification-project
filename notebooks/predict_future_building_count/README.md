@@ -1,4 +1,4 @@
-# Lamwo Electrification Project
+# Predicting future building counts
 
 This project aims to predict future building counts using satellite imagery and machine learning models. The workflow is divided into four main stages: data preprocessing, model training, model testing, and historic building count analysis.
 
